@@ -105,19 +105,22 @@ Capabilities land as independent modules; the orchestrator composes them. No cap
 
 ---
 
-## 6. Repository Conventions (planned layout)
+## 6. Repository Conventions (actual layout)
 
-The final top-level structure is not yet finalized, but future code should respect this shape:
+The repository is organized as follows (established in scaffolding; recorded in `docs/ADR.md`, ADR-0001):
 
 ```
-backend/      # FastAPI + Python (API, DB access, server-side logic)
-frontend/     # Next.js + TypeScript (UI only, no DB access)
-agents/       # LangGraph orchestration (or within backend, per future decision)
-tools/        # Tool implementations (search, calculator, SQL, retrieval)
-docs/         # Architecture docs, decisions
+apps/
+  api/        # FastAPI + Python backend (API, DB access, server-side logic)
+  web/        # Next.js + TypeScript frontend (UI only, no DB access)
+core/         # Python packages: agent/, rag/, tools/, memory/, evaluation/
+database/     # migrations/ and seeds/ (PostgreSQL + pgvector, configured later)
+tests/        # test suites
+docs/         # Architecture docs and decisions (docs/ADR.md)
+scripts/      # development and operations scripts
 ```
 
-This layout is indicative, not final — refine it when scaffolding starts, and update this section to match reality.
+The backend is launched from the repository root as a package (e.g., `python -m uvicorn apps.api.main:app`); environment files are application-local: `apps/api/.env` and `apps/web/.env.local` (both gitignored; only `*.env.example` templates are tracked).
 
 ---
 
